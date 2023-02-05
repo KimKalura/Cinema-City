@@ -16,10 +16,6 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-   /* @GetMapping("/availability")
-    public List<Ticket> getAllAvailableTickets(@RequestBody ProjectionDTO projectionDTO){
-        return ticketService.getAllAvailableTickets(projectionDTO.getStartTime(), projectionDTO.getEndTime());
-    }*/
 
     @GetMapping("/totalPrice/{day}")
     public Long getValueOfTicketsSoldByDay(@PathVariable ("day") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
