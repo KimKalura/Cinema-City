@@ -1,10 +1,15 @@
 package com.spring.cinemaapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.spring.cinemaapp.config.StringListConverter;
 //import jakarta.persistence.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,80 +20,66 @@ public class Movie {
     private Long id;
 
     @Column
-    private String name;
-
+    private String movieName;
     @Column
-    private LocalDateTime date;
-
+    private Double price;
     @Column
-    private int priceFilm;
-
+    private String overview;
     @Column
-    private int points;
+    private String language;
+    @Column
+    private LocalDate releaseDate;
+    @Column
+    private Double voteAverage;
+
 
     @ManyToOne
-    @JsonIgnore
-    //@JsonBackReference
-    @JoinColumn(name = "cinemaRoom_id")
+    @JoinColumn(name = "cinema_room_id")
+    @JsonBackReference(value = "cinema-movie")
     private CinemaRoom cinemaRoom;
 
     @OneToMany(mappedBy = "movie", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<WatchingTime> watchingTimes;
+    @JsonManagedReference(value="movie-projection")
+    private List<Projection> projectionList;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name="user_id")
-    private User user;
+    @Convert(converter = StringListConverter.class)
+    private List<String> genres;
 
 
 
     public Movie(){}
 
-    public Movie(Long id, String name, LocalDateTime date, int priceFilm, int points, CinemaRoom cinemaRoom, List<WatchingTime> watchingTimes, User user) {
+    public Movie(Long id, String movieName, Double price, String overview, String language, LocalDate releaseDate, Double voteAverage, CinemaRoom cinemaRoom, List<Projection> projectionList, List<String> genres) {
         this.id = id;
-        this.name = name;
-        this.date = date;
-        this.priceFilm = priceFilm;
-        this.points = points;
+        this.movieName = movieName;
+        this.price = price;
+        this.overview = overview;
+        this.language = language;
+        this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
         this.cinemaRoom = cinemaRoom;
-        this.watchingTimes = watchingTimes;
-        this.user = user;
+        this.projectionList = projectionList;
+        this.genres = genres;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getMovieName() {
+        return movieName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMovieName(String name) {
+        this.movieName = name;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public int getPriceFilm() {
-        return priceFilm;
-    }
-
-    public void setPriceFilm(int priceFilm) {
-        this.priceFilm = priceFilm;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public CinemaRoom getCinemaRoom() {
@@ -99,19 +90,54 @@ public class Movie {
         this.cinemaRoom = cinemaRoom;
     }
 
-    public List<WatchingTime> getWatchingTimes() {
-        return watchingTimes;
+    public List<Projection> getProjectionList() {
+        if(this.projectionList == null) {
+            this.projectionList = new ArrayList<>();
+        }
+        return projectionList;
     }
 
-    public void setWatchingTimes(List<WatchingTime> watchingTimes) {
-        this.watchingTimes = watchingTimes;
+    public String getOverview() {
+        return overview;
     }
 
-    public User getUser() {
-        return user;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public void setProjectionList(List<Projection> projectionList) {
+        this.projectionList = projectionList;
+    }
+
+    public List<String> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
     }
 }

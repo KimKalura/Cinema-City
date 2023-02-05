@@ -1,9 +1,10 @@
 package com.spring.cinemaapp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,16 +20,13 @@ public class User {
     @Column
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Movie> movieList;
+    @Column
+    private String email;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonBackReference
-    private MovieSeat movieSeat;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonBackReference
-    private Order order;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference(value="user-order")
+    private List<Order> orderList;
 
     @ManyToMany
     @JsonIgnoreProperties("userList")
@@ -41,6 +39,15 @@ public class User {
 
 
     public User(){}
+
+    public User(Long id, String username, String password, List<Order> orderList, List<Role> roleList, String email) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.orderList = orderList;
+        this.roleList = roleList;
+        this.email = email;
+    }
 
     public Long getId() {
         return id;
@@ -62,35 +69,33 @@ public class User {
         this.password = password;
     }
 
-    public List<Movie> getMovieList() {
-        return movieList;
+    public List<Order> getOrderList() {
+        if(this.orderList == null){
+            this.orderList = new ArrayList<>();
+        }
+        return orderList;
     }
 
-    public void setMovieList(List<Movie> movieList) {
-        this.movieList = movieList;
-    }
-
-    public MovieSeat getMovieSeat() {
-        return movieSeat;
-    }
-
-    public void setMovieSeat(MovieSeat movieSeat) {
-        this.movieSeat = movieSeat;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
     }
 
     public List<Role> getRoleList() {
+        if(this.roleList == null){
+            this.roleList = new ArrayList<>();
+        }
         return roleList;
     }
 
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

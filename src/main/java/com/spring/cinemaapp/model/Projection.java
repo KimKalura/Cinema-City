@@ -1,15 +1,15 @@
 package com.spring.cinemaapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.spring.cinemaapp.model.Movie;
-import com.spring.cinemaapp.model.MovieSeat;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class WatchingTime {
+public class Projection {
 
     @Id
     @GeneratedValue
@@ -21,23 +21,24 @@ public class WatchingTime {
     @Column
     private LocalDateTime endTime;
 
-    @OneToMany(mappedBy = "watchingTime", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<MovieSeat> movieSeat;
+    @OneToMany(mappedBy = "projection", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonManagedReference(value="projection-ticket")
+    private List<Ticket> ticketList;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "movie_id")
+    @JsonBackReference(value="movie-projection")
     private Movie movie;
 
 
 
-    public WatchingTime(){}
+    public Projection(){}
 
-    public WatchingTime(Long id, LocalDateTime startTime, LocalDateTime endTime, List<MovieSeat> movieSeat, Movie movie) {
+    public Projection(Long id, LocalDateTime startTime, LocalDateTime endTime, List<Ticket> ticketList, Movie movie) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.movieSeat = movieSeat;
+        this.ticketList = ticketList;
         this.movie = movie;
     }
 
@@ -61,12 +62,15 @@ public class WatchingTime {
         this.endTime = endTime;
     }
 
-    public List<MovieSeat> getMovieSeat() {
-        return movieSeat;
+    public List<Ticket> getTicketList() {
+        if(this.ticketList == null){
+            this.ticketList = new ArrayList<>();
+        }
+        return ticketList;
     }
 
-    public void setMovieSeat(List<MovieSeat> movieSeat) {
-        this.movieSeat = movieSeat;
+    public void setTicketList(List<Ticket> ticketList) {
+        this.ticketList = ticketList;
     }
 
     public Movie getMovie() {

@@ -1,9 +1,11 @@
 package com.spring.cinemaapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 //import jakarta.persistence.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Seat {
@@ -13,44 +15,33 @@ public class Seat {
     private Long id;
 
     @Column
-    private int numberOfRows;
+    private Integer seatRow;
 
     @Column
-    private int numberOfCols;
+    private Integer seatCol;
 
     @Column
-    private int priceSeat;
+    private Integer extraPrice;
 
-    @Column
-    private int extraPriceSeat;
-
-    @Column
-    private int startingRow;
-
-    @Column
-    private int endingRow;
-
-    @Column
-    private boolean isAvailable;
+    @OneToMany(mappedBy = "seat", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonManagedReference(value="seat-ticket")
+    private List<Ticket> ticketList;
 
     @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "cinemaRoom_id")
+    @JoinColumn(name = "cinema_room_id")
+    @JsonBackReference(value="cinema-seat")
     private CinemaRoom cinemaRoom;
 
 
 
     public Seat(){}
 
-    public Seat(Long id, int numberOfRows, int numberOfCols, int priceSeat, int extraPriceSeat, int startingRow, int endingRow, boolean isAvailable, CinemaRoom cinemaRoom) {
+    public Seat(Long id, Integer seatRow, Integer seatCol, Integer extraPrice, List<Ticket> ticketList, CinemaRoom cinemaRoom) {
         this.id = id;
-        this.numberOfRows = numberOfRows;
-        this.numberOfCols = numberOfCols;
-        this.priceSeat = priceSeat;
-        this.extraPriceSeat = extraPriceSeat;
-        this.startingRow = startingRow;
-        this.endingRow = endingRow;
-        this.isAvailable = isAvailable;
+        this.seatRow = seatRow;
+        this.seatCol = seatCol;
+        this.extraPrice = extraPrice;
+        this.ticketList = ticketList;
         this.cinemaRoom = cinemaRoom;
     }
 
@@ -58,60 +49,36 @@ public class Seat {
         return id;
     }
 
-    public int getNumberOfRows() {
-        return numberOfRows;
+    public Integer getSeatRow() {
+        return seatRow;
     }
 
-    public void setNumberOfRows(int numberOfRows) {
-        this.numberOfRows = numberOfRows;
+    public void setSeatRow(Integer seatRow) {
+        this.seatRow = seatRow;
     }
 
-    public int getNumberOfCols() {
-        return numberOfCols;
+    public Integer getSeatCol() {
+        return seatCol;
     }
 
-    public void setNumberOfCols(int numberOfCols) {
-        this.numberOfCols = numberOfCols;
+    public void setSeatCol(Integer seatCol) {
+        this.seatCol = seatCol;
     }
 
-    public int getPriceSeat() {
-        return priceSeat;
+    public Integer getExtraPrice() {
+        return extraPrice;
     }
 
-    public void setPriceSeat(int priceSeat) {
-        this.priceSeat = priceSeat;
+    public void setExtraPrice(Integer extraPrice) {
+        this.extraPrice = extraPrice;
     }
 
-    public int getExtraPriceSeat() {
-        return extraPriceSeat;
+    public List<Ticket> getTicketList() {
+        return ticketList;
     }
 
-    public void setExtraPriceSeat(int extraPriceSeat) {
-        this.extraPriceSeat = extraPriceSeat;
-    }
-
-    public int getStartingRow() {
-        return startingRow;
-    }
-
-    public void setStartingRow(int startingRow) {
-        this.startingRow = startingRow;
-    }
-
-    public int getEndingRow() {
-        return endingRow;
-    }
-
-    public void setEndingRow(int endingRow) {
-        this.endingRow = endingRow;
-    }
-
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    public void setTicketList(List<Ticket> ticketList) {
+        this.ticketList = ticketList;
     }
 
     public CinemaRoom getCinemaRoom() {
