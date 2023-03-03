@@ -9,7 +9,7 @@ public class RegisterDTO {
     private String username;
     @NotBlank(message = "Password is mandatory")
     private String password;
-    @Email(message ="Email provided is not valid")
+    @Email(message = "Email provided is not valid")
     private String email;
 
 
