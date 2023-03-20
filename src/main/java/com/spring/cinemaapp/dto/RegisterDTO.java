@@ -12,11 +12,13 @@ public class RegisterDTO {
     @Email(message = "Email provided is not valid")
     private String email;
 
+    private String role;
 
-    public RegisterDTO(String username, String password, String email) {
+    public RegisterDTO(String username, String password, String email, String role) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
     public String getUsername() {
@@ -41,5 +43,13 @@ public class RegisterDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
