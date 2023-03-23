@@ -269,7 +269,9 @@ To deploy this project run
 
 You cand use the a demo version of the app, using SwaggerUI and following this link:
 
---
+```bash
+https://rocky-mountain-49016.herokuapp.com/swagger-ui/
+```
 
 First, obtain an access token by running the /authenticate endpoint with username "user" and password "pass", which will grant you admin rights in the application.
 
