@@ -47,7 +47,7 @@ public class MailService {
 
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setFrom("cursjustcodeit@gmail.com");
+        helper.setFrom("florianaralucadeftu@gmail.com");
         helper.setTo(recepientMail);
 
         helper.setSubject("Rezervarea ta la filmul " + order.getTicketList().get(0).getProjection().getMovie().getMovieName());
