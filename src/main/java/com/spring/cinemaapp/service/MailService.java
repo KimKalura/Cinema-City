@@ -51,7 +51,7 @@ public class MailService {
         helper.setTo(recepientMail);
 
         helper.setSubject("Rezervarea ta la filmul " + order.getTicketList().get(0).getProjection().getMovie().getMovieName());
-        helper.setText("Ai atasate cele " + order.getTicketList().size() + " bilete pentru fimul " + order.getTicketList().get(0).getProjection().getMovie().getMovieName());
+        helper.setText("Ai atasate cele " + order.getTicketList().size() + " bilete pentru filmul " + order.getTicketList().get(0).getProjection().getMovie().getMovieName());
         helper.addAttachment("ticket.pdf", pdfService.generateTicketPdf(order));
         emailSender.send(message);
     }

@@ -1,0 +1,35 @@
+version: '3.8'
+
+#Docker compose
+
+services:
+  # MySQL Database Service
+  mysql-database:
+    image: mysql:8.0
+    container_name: mysql-database-cinema
+    environment:
+      MYSQL_DATABASE: cinema_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: unless-stopped
+
+
+  # Spring Boot Application Service
+  spring-boot-app:
+    build: .
+    container_name: spring-boot-cinema-app
+    depends_on:
+      - mysql-database
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-database-cinema:3306/cinema_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
